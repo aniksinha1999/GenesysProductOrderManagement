@@ -1,13 +1,12 @@
 package genesys.code.productManagement.controller;
 
-import genesys.code.productManagement.dto.requestDto.OrderProductRequestDto;
+
 import genesys.code.productManagement.dto.requestDto.ProductDtoRequest;
 import genesys.code.productManagement.dto.responseDto.ProductDtoResponse;
 import genesys.code.productManagement.model.Product;
 import genesys.code.productManagement.service.ProductService;
 import jakarta.validation.Valid;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
