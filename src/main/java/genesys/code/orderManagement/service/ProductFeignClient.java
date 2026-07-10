@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @FeignClient(name = "product-service", url = "${product.service.url}")
 public interface ProductFeignClient {
 
+
     @GetMapping("/api/productService/getProductByProductCode")
     Product getProductByProductCode(
             @RequestParam("productCode") String productCode);
