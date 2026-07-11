@@ -12,6 +12,7 @@ public class OrderResponseDto {
     private String message;
     private BigDecimal totalAmount;
 
+
     public OrderResponseDto() {
     }
 }

@@ -26,7 +26,7 @@ public class OrderController {
         return orderService.getAllOrders();
     }
     @GetMapping("/order/{id}")
-    public OrderResponseDto getOrder(@PathVariable String id) {
+    public Order getOrder(@PathVariable String id) {
         return orderService.getOrder(Integer.parseInt(id));
     }
 }

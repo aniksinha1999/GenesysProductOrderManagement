@@ -10,6 +10,6 @@ import java.util.List;
 public interface OrderService {
     OrderResponseDto createOrder(OrderRequestDto orderRequestDto);
     List<Order> getAllOrders();
-    OrderResponseDto getOrder(int  orderId);
+    Order getOrder(int  orderId);
 
 }

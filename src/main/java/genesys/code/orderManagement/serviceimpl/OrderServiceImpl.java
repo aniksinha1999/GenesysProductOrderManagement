@@ -115,22 +115,10 @@ public class OrderServiceImpl implements OrderService {
     }
 
     @Override
-    public OrderResponseDto getOrder(int orderId) {
+    public Order getOrder(int orderId) {
         OrderResponseDto response = new OrderResponseDto();
 
-        Order order = orderRepository.findById((long) orderId).orElse(null);
 
-        if (order == null) {
-            response.setStatusCode("404");
-
-            response.setMessage("Order not found");
-        } else {
-            response.setStatusCode("200");
-           ;
-            response.setMessage("Order found");
-            response.setOrderId(String.valueOf(order.getId()));
-        }
-
-        return response;
+        return orderRepository.findById((long) orderId).orElse(null);
     }
 }
