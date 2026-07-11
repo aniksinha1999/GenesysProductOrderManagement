@@ -1,11 +1,13 @@
 package genesys.code.orderManagement.serviceimpl;
 
+import genesys.code.orderManagement.dto.requestDto.NotificationRequestDto;
 import genesys.code.orderManagement.dto.requestDto.OrderProductRequestDto;
 import genesys.code.orderManagement.dto.requestDto.OrderRequestDto;
 import genesys.code.orderManagement.dto.responseDto.OrderResponseDto;
 import genesys.code.orderManagement.dto.responseDto.Product;
 import genesys.code.orderManagement.model.Order;
 import genesys.code.orderManagement.repository.OrderRepository;
+import genesys.code.orderManagement.service.EmailFeignClient;
 import genesys.code.orderManagement.service.OrderService;
 import genesys.code.orderManagement.service.ProductFeignClient;
 import io.github.resilience4j.circuitbreaker.annotation.CircuitBreaker;
@@ -21,11 +23,13 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductFeignClient productFeignClient;
+    private final EmailFeignClient emailFeignClient;
 
     public OrderServiceImpl(OrderRepository orderRepository,
-                            ProductFeignClient productFeignClient) {
+                            ProductFeignClient productFeignClient, EmailFeignClient emailFeignClient) {
         this.orderRepository = orderRepository;
         this.productFeignClient = productFeignClient;
+        this.emailFeignClient = emailFeignClient;
     }
 
     @Override
@@ -66,6 +70,7 @@ public class OrderServiceImpl implements OrderService {
         order.setOrderNumber(UUID.randomUUID().toString());
         order.setProductCode(product.getProductCode());
         order.setProductName(product.getProductName());
+        order.setProductDescription(product.getDescription());
 
         order.setCustomerName(orderRequestDto.getCustomerName());
         order.setCustomerEmail(orderRequestDto.getCustomerEmail());
@@ -88,6 +93,10 @@ public class OrderServiceImpl implements OrderService {
         response.setOrderId(String.valueOf(order.getId()));
         response.setOrderStatus(String.valueOf(order.getStatus()));
         response.setTotalAmount(order.getTotalAmount());
+       NotificationRequestDto notificationRequestDto=mapNotification(order,orderRequestDto);
+       emailFeignClient.sendNotification(notificationRequestDto);
+
+
 
         return response;
     }
@@ -120,5 +129,20 @@ public class OrderServiceImpl implements OrderService {
 
 
         return orderRepository.findById((long) orderId).orElse(null);
+    }
+
+    public  NotificationRequestDto mapNotification(Order order,OrderRequestDto orderRequestDto){
+        NotificationRequestDto notificationRequestDto = new NotificationRequestDto();
+        notificationRequestDto.setEmail(orderRequestDto.getCustomerEmail());
+        notificationRequestDto.setOrderNumber(order.getOrderNumber());
+        notificationRequestDto.setShippingAddress(orderRequestDto.getShippingAddress());
+        notificationRequestDto.setPrice(String.valueOf(order.getPrice()));
+        notificationRequestDto.setProductDescription(order.getProductDescription());
+        notificationRequestDto.setQuantity(String.valueOf(order.getQuantity()));
+        notificationRequestDto.setProcessingStatus(order.getStatus().toString());
+        notificationRequestDto.setProductName(order.getProductName());
+        notificationRequestDto.setTotalAmount(String.valueOf(order.getTotalAmount()));
+        return notificationRequestDto;
+
     }
 }

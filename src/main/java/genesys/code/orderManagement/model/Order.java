@@ -23,6 +23,8 @@ public class Order {
 
     @Column(nullable = false)
     private String productName;
+    @Column(nullable = false)
+    private String productDescription;
 
     @Column(nullable = false)
     private Integer quantity;
