@@ -1,26 +1,50 @@
+================================================================================
+Genesys Product Order Management System
+Java Spring Boot Microservices
+================================================================================
 
+Author
+------
+Anik Sinha
+Backend Engineer | Java | Spring Boot | Microservices | AWS | REST APIs
 
-A **Java Spring Boot Microservices** application demonstrating **Product Management** and **Order Management** using modern backend engineering practices.
+--------------------------------------------------------------------------------
+Project Overview
+--------------------------------------------------------------------------------
 
-This project showcases:
+This project demonstrates a production-style Java Spring Boot Microservices
+application implementing Product Management and Order Management.
 
-- ✅ Spring Boot 3
-- ✅ Microservices Architecture
-- ✅ RESTful APIs
-- ✅ Spring Data JPA
-- ✅ H2 Database
-- ✅ OpenFeign Inter-Service Communication
-- ✅ Resilience4J Circuit Breaker
-- ✅ Bean Validation
-- ✅ Layered Architecture
-- ✅ Exception Handling
-- ✅ Maven
+The solution follows clean architecture principles with separated services,
+inter-service communication using OpenFeign, resilience through Circuit Breaker,
+layered architecture, validation, centralized exception handling, and REST APIs.
 
----
+The primary objective is to simulate a simplified e-commerce backend while
+showcasing modern backend engineering practices.
 
-# Architecture
+--------------------------------------------------------------------------------
+Key Features
+--------------------------------------------------------------------------------
 
-```
+✔ Spring Boot 3
+✔ Java 21
+✔ Microservices Architecture
+✔ RESTful APIs
+✔ Spring Data JPA
+✔ H2 Database
+✔ OpenFeign Communication
+✔ Resilience4J Circuit Breaker
+✔ Bean Validation
+✔ Layered Architecture
+✔ Exception Handling
+✔ Maven Build
+✔ Inventory Management
+✔ Order Processing
+
+--------------------------------------------------------------------------------
+Architecture
+--------------------------------------------------------------------------------
+
                          +------------------------+
                          |     Client/Postman     |
                          +-----------+------------+
@@ -36,79 +60,45 @@ This project showcases:
              Spring Data JPA                          Spring Data JPA
                  |                                         |
               H2 Database                              H2 Database
-```
 
----
+--------------------------------------------------------------------------------
+Microservices
+--------------------------------------------------------------------------------
 
-# Features
+Product Service
+---------------
+Runs on:
+http://localhost:8080
 
-## Product Management Service
+Responsibilities
 
-- Create Multiple Products
-- Get All Products
-- Get Product By ID
-- Get Product By Product Code
-- Update Product Quantity
-- Product Validation
+- Product CRUD
 - Inventory Management
+- Product Validation
+- Product Lookup
+- Quantity Update
 
----
+Order Service
+-------------
+Runs on:
+http://localhost:8082
 
-## Order Management Service
+Responsibilities
 
 - Place Order
-- Validate Product using Product Service
-- Verify Available Stock
-- Update Inventory after Successful Order
-- Calculate Total Order Amount
-- Generate Unique Order Number
-- Store Order Details
-- Circuit Breaker using Resilience4J
+- Product Validation
+- Stock Verification
+- Inventory Update
+- Total Price Calculation
+- Order Persistence
+- Circuit Breaker
 
----
+--------------------------------------------------------------------------------
+Project Structure
+--------------------------------------------------------------------------------
 
-# Tech Stack
-
-| Technology | Version |
-|------------|---------|
-| Java | 21 |
-| Spring Boot | 3.x |
-| Spring Data JPA | Latest |
-| Spring Cloud OpenFeign | Latest |
-| Resilience4J | Latest |
-| H2 Database | Latest |
-| Maven | Latest |
-| Lombok | Latest |
-
----
-
-# Microservices
-
-## Product Service
-
-Runs on
-
-```
-http://localhost:8080
-```
-
----
-
-## Order Service
-
-Runs on
-
-```
-http://localhost:8082
-```
-
----
-
-# Project Structure
-
-```
 GenesysProductOrderManagement
-│
+
 ├── ProductManagement
 │
 │   ├── controller
@@ -117,8 +107,8 @@ GenesysProductOrderManagement
 │   ├── repository
 │   ├── service
 │   ├── serviceimpl
-│   ├── exception
-│   └── configuration
+│   ├── configuration
+│   └── exception
 │
 └── OrderManagement
 
@@ -130,368 +120,425 @@ GenesysProductOrderManagement
     ├── serviceimpl
     ├── feign
     ├── configuration
-    └── circuitbreaker
-```
+    ├── circuitbreaker
+    └── exception
 
----
+--------------------------------------------------------------------------------
+Order Processing Flow
+--------------------------------------------------------------------------------
 
-# Inter Service Communication
-
-The **Order Service** communicates with the **Product Service** using **Spring Cloud OpenFeign**.
-
-Flow
-
-```
 Create Order
 
-        │
+      │
 
-        ▼
+      ▼
 
-Fetch Product Details
+Call Product Service
 
-        │
+      │
 
-        ▼
+      ▼
 
-Validate Product Exists
+Validate Product
 
-        │
+      │
 
-        ▼
+      ▼
 
-Validate Product Active
+Check Available Stock
 
-        │
+      │
 
-        ▼
+      ▼
 
-Validate Quantity Available
+Update Inventory
 
-        │
+      │
 
-        ▼
+      ▼
 
-Update Product Inventory
+Calculate Amount
 
-        │
+      │
 
-        ▼
+      ▼
 
 Save Order
 
-        │
+      │
 
-        ▼
+      ▼
 
 Return Success Response
-```
 
----
+--------------------------------------------------------------------------------
+Circuit Breaker Flow
+--------------------------------------------------------------------------------
 
-# Circuit Breaker
-
-Implemented using **Resilience4J**
-
-If Product Service is unavailable,
-
-```
 Order Service
+
       │
+
       ▼
+
+Product Service Unavailable
+
+      │
+
+      ▼
+
 Circuit Breaker Opens
+
       │
+
       ▼
-Fallback Method Executes
+
+Fallback Method
+
       │
+
       ▼
+
 Graceful Error Response
-```
 
-instead of crashing the application.
+Instead of propagating failures to the client, the application returns a
+controlled response and prevents repeated failures from overwhelming the
+Product Service.
 
----
+--------------------------------------------------------------------------------
+Technology Stack
+--------------------------------------------------------------------------------
 
-# H2 Console
+Java                      21
+
+Spring Boot               3.x
+
+Spring Data JPA
+
+Spring Cloud OpenFeign
+
+Resilience4J
+
+Hibernate
+
+H2 Database
+
+Maven
+
+Lombok
+
+Bean Validation
+
+--------------------------------------------------------------------------------
+API Execution Order
+--------------------------------------------------------------------------------
+
+1. Start Product Service
+
+Port : 8080
+
+2. Start Order Service
+
+Port : 8082
+
+3. Insert Products
+
+POST
+
+/api/productService/product
+
+4. Verify Products
+
+GET
+
+/api/productService/product
+
+5. Create Order
+
+POST
+
+/api/orderService/order
+
+6. Verify Orders
+
+GET
+
+/ api/orderService/order
+
+--------------------------------------------------------------------------------
+Swagger
+--------------------------------------------------------------------------------
 
 Product Service
 
-```
+http://localhost:8080/swagger-ui/index.html
+
+--------------------------------------------------------------------------------
+H2 Console
+--------------------------------------------------------------------------------
+
+Product Service
+
 http://localhost:8080/h2-console
-```
 
 Order Service
 
-```
 http://localhost:8082/h2-console
-```
 
-Credentials
+Username
 
-```
-Username : product
+product
 
-Password : product
-```
+Password
 
----
+product
 
-# API Execution Order
+--------------------------------------------------------------------------------
+Design Decisions
+--------------------------------------------------------------------------------
 
-## Step 1
+1. Separate Product and Order Services
 
-Start Product Service
+Reason
 
-```
-Port : 8080
-```
+Product and Order represent different business capabilities.
 
----
+Benefits
 
-## Step 2
+• Independent deployment
+• Better scalability
+• Clear ownership
+• Easier maintenance
 
-Start Order Service
+Trade-off
 
-```
-Port : 8082
-```
+• Requires inter-service communication
+• Network latency
+• Distributed system complexity
 
----
+--------------------------------------------------------------------------------
 
-## Step 3
+2. OpenFeign
 
-Insert Products
+Reason
 
-```
-POST /api/productService/product
-```
+Provides declarative REST clients and reduces boilerplate HTTP code.
 
----
+Benefits
 
-## Step 4
+• Clean code
+• Easy integration
+• Spring Cloud support
+• Automatic serialization
 
-Verify Products
+Trade-off
 
-```
-GET /api/productService/product
-```
+• Tight runtime dependency between services
+• Additional latency compared to local method calls
 
----
+--------------------------------------------------------------------------------
 
-## Step 5
+3. Resilience4J Circuit Breaker
 
-Create Order
+Reason
 
-```
-POST /api/orderService/order
-```
+A failed Product Service should not continuously affect the Order Service.
 
----
+Benefits
 
-## Step 6
+• Prevents cascading failures
+• Improves system stability
+• Graceful fallback responses
 
-Verify Order
+Trade-off
 
-```
-GET /api/orderService/order
-```
+• Adds operational complexity
+• Requires careful threshold tuning
+• Temporary service failures may still reject valid requests until recovery
 
----
+--------------------------------------------------------------------------------
 
-# Product Service APIs
+4. Spring Data JPA
 
----
+Reason
 
-## Create Products (Bulk)
+Simplifies persistence with repositories instead of handwritten SQL.
 
-```bash
-curl --location 'http://localhost:8080/api/productService/product' \
---header 'Content-Type: application/json' \
---data '[
-  {
-    "productCode": "PRD1001",
-    "productName": "Apple iPhone 16",
-    "description": "128GB Black",
-    "price": 79999.99,
-    "quantity": 50,
-    "category": "Mobile",
-    "brand": "Apple",
-    "supplier": "Apple India",
-    "active": true
-  },
-  {
-    "productCode": "PRD1002",
-    "productName": "Samsung Galaxy S25",
-    "description": "256GB Silver",
-    "price": 74999.00,
-    "quantity": 40,
-    "category": "Mobile",
-    "brand": "Samsung",
-    "supplier": "Samsung India",
-    "active": true
-  },
-  {
-    "productCode": "PRD1003",
-    "productName": "Sony WH-1000XM5",
-    "description": "Wireless Noise Cancelling Headphones",
-    "price": 29999.00,
-    "quantity": 60,
-    "category": "Accessories",
-    "brand": "Sony",
-    "supplier": "Sony India",
-    "active": true
-  },
-  {
-    "productCode": "PRD1004",
-    "productName": "Dell XPS 15",
-    "description": "Intel i7, 16GB RAM, 512GB SSD",
-    "price": 154999.00,
-    "quantity": 15,
-    "category": "Laptop",
-    "brand": "Dell",
-    "supplier": "Dell Technologies",
-    "active": true
-  },
-  {
-    "productCode": "PRD1005",
-    "productName": "Apple Watch Series 10",
-    "description": "GPS 45mm Midnight",
-    "price": 49999.00,
-    "quantity": 35,
-    "category": "Wearables",
-    "brand": "Apple",
-    "supplier": "Apple India",
-    "active": true
-  },
-  {
-    "productCode": "PRD1006",
-    "productName": "Logitech MX Master 3S",
-    "description": "Wireless Ergonomic Mouse",
-    "price": 9999.00,
-    "quantity": 100,
-    "category": "Accessories",
-    "brand": "Logitech",
-    "supplier": "Logitech India",
-    "active": true
-  },
-  {
-    "productCode": "PRD1007",
-    "productName": "HP LaserJet Pro MFP",
-    "description": "All-in-One Wireless Printer",
-    "price": 18999.00,
-    "quantity": 20,
-    "category": "Printer",
-    "brand": "HP",
-    "supplier": "HP India",
-    "active": true
-  },
-  {
-    "productCode": "PRD1008",
-    "productName": "Apple iPad Air",
-    "description": "11-inch Wi-Fi 256GB",
-    "price": 69999.00,
-    "quantity": 25,
-    "category": "Tablet",
-    "brand": "Apple",
-    "supplier": "Apple India",
-    "active": true
-  },
-  {
-    "productCode": "PRD1009",
-    "productName": "OnePlus 13",
-    "description": "512GB Emerald Green",
-    "price": 64999.00,
-    "quantity": 45,
-    "category": "Mobile",
-    "brand": "OnePlus",
-    "supplier": "OnePlus India",
-    "active": true
-  },
-  {
-    "productCode": "PRD1010",
-    "productName": "Lenovo ThinkPad X1 Carbon",
-    "description": "Intel Ultra 7, 32GB RAM, 1TB SSD",
-    "price": 179999.00,
-    "quantity": 10,
-    "category": "Laptop",
-    "brand": "Lenovo",
-    "supplier": "Lenovo India",
-    "active": true
-  }
-]'
-```
+Benefits
 
----
+• Less boilerplate
+• Database abstraction
+• Faster development
 
-## Get All Products
+Trade-off
 
-```bash
-curl --location 'http://localhost:8080/api/productService/product'
-```
+• Slight performance overhead
+• Complex queries sometimes require native SQL
 
----
+--------------------------------------------------------------------------------
 
-## Get Product By ID
+5. Layered Architecture
 
-```bash
-curl --location 'http://localhost:8080/api/productService/product/4'
-```
+Controller
 
----
+↓
 
-## Get Product By Product Code
+Service
 
-```bash
-curl --location 'http://localhost:8080/api/productService/getProductByProductCode?productCode=PRD1001'
-```
+↓
 
----
+Repository
 
-## Update Product Quantity
+Reason
 
-```bash
-curl --location --request PUT \
-'http://localhost:8080/api/productService/updateProduct?productCode=PRD1001&quantity=2'
-```
+Separates business logic from API and persistence.
 
----
+Benefits
 
-# Order Service APIs
+• Better maintainability
+• Easier testing
+• Loose coupling
 
----
+Trade-off
 
-## Create Order
+• More classes
+• Slightly more code for small applications
 
-```bash
-curl --location 'http://localhost:8082/api/orderService/order' \
---header 'Content-Type: application/json' \
---data-raw '{
-  "productCode": "PRD1005",
-  "productName": "Apple Watch Series 10",
-  "quantity": 6,
-  "customerName": "Anik Sinha",
-  "customerEmail": "anik.sinha@example.com",
-  "shippingAddress": "Flat 302, Prestige Tech Park, Marathahalli, Bengaluru, Karnataka 560037"
-}'
-```
+--------------------------------------------------------------------------------
 
----
+6. Bean Validation
 
-## Get All Orders
+Reason
 
-```bash
-curl --location 'http://localhost:8082/api/orderService/order'
-```
+Reject invalid requests before business processing.
 
----
-Swagger Document - http://localhost:8080/swagger-ui/index.html#/
+Benefits
 
+• Cleaner code
+• Better API contracts
+• Consistent validation
 
+Trade-off
+
+• Additional annotations
+• Complex validation rules may require custom validators
+
+--------------------------------------------------------------------------------
+
+7. H2 Database
+
+Reason
+
+Chosen for demonstration and interview purposes.
+
+Benefits
+
+• Zero installation
+• Fast startup
+• Easy testing
+
+Trade-off
+
+• Not suitable for production
+• Data is lost after restart unless configured for persistence
+
+--------------------------------------------------------------------------------
+
+8. Bulk Product Creation API
+
+Reason
+
+Allows loading sample inventory quickly.
+
+Benefits
+
+• Faster testing
+• Reduced API calls
+
+Trade-off
+
+• Larger payloads consume more memory
+• Partial failure handling becomes more complex
+
+--------------------------------------------------------------------------------
+
+9. Synchronous Communication
+
+Reason
+
+Immediate inventory validation is required before confirming an order.
+
+Benefits
+
+• Strong consistency
+• Simple implementation
+
+Trade-off
+
+• Higher response time
+• Order Service depends on Product Service availability
+
+Alternative
+
+For high-scale production systems, asynchronous messaging using Kafka or RabbitMQ
+could improve availability and throughput.
+
+--------------------------------------------------------------------------------
+Current Limitations
+--------------------------------------------------------------------------------
+
+• Uses H2 instead of PostgreSQL/MySQL
+• No API Gateway
+• No Service Discovery (Eureka)
+• No Distributed Tracing
+• No Authentication or Authorization
+• No Docker/Kubernetes deployment
+• No Messaging Queue
+• No Distributed Transactions
+
+--------------------------------------------------------------------------------
+Future Enhancements
+--------------------------------------------------------------------------------
+
+• Docker Support
+• Kubernetes Deployment
+• Eureka Discovery Server
+• Spring Cloud Gateway
+• PostgreSQL
+• Redis Caching
+• Kafka Event Streaming
+• JWT Authentication
+• Prometheus Metrics
+• Grafana Dashboard
+• Zipkin Distributed Tracing
+• Centralized Logging using ELK
+• CI/CD Pipeline
+• Unit Tests and Integration Tests
+
+--------------------------------------------------------------------------------
 Branches
-dev - productManagement
-devOrder- orderManagement
-# Author
+--------------------------------------------------------------------------------
 
-**Anik Sinha**
+dev
+Product Management
 
-Backend Engineer | Java | Spring Boot | Microservices | AWS | REST APIs
+devOrder
+Order Management
+
+--------------------------------------------------------------------------------
+Conclusion
+--------------------------------------------------------------------------------
+
+This project demonstrates the implementation of a clean and modular
+microservices architecture using Spring Boot. It focuses on separation of
+concerns, maintainability, resiliency, and modern backend development
+practices.
+
+The chosen technologies prioritize readability, rapid development, and
+interview-friendly design while highlighting the trade-offs involved in
+building distributed systems. The architecture can be extended toward a
+production-grade solution by integrating service discovery, centralized
+configuration, messaging, security, observability, containerization, and
+cloud-native deployment practices.
+
+================================================================================
