@@ -484,47 +484,7 @@ curl --location 'http://localhost:8082/api/orderService/order'
 ```
 
 ---
-
-## Interview Highlights
-
-This project demonstrates:
-
-- Microservices Architecture
-- RESTful API Design
-- Spring Boot Best Practices
-- OpenFeign Client
-- Circuit Breaker Pattern
-- Inventory Management
-- Transactional Business Flow
-- H2 Database Integration
-- Exception Handling
-- Bean Validation
-- Layered Architecture
-- UUID-based Order Number Generation
-- Clean Code Principles
-- Maven Build Management
-
----
-
-# Future Enhancements
-
-- Docker Support
-- Docker Compose
-- API Gateway
-- Eureka Service Discovery
-- Config Server
-- JWT Authentication
-- Role-Based Authorization
-- Kafka Event Driven Communication
-- MySQL / PostgreSQL
-- Redis Caching
-- Swagger / OpenAPI
-- Kubernetes Deployment
-- CI/CD using GitHub Actions
-- Distributed Tracing
-- Centralized Logging (ELK)
-
----
+Swagger Order Service -http://localhost:8082/swagger-ui/index.html#/
 
 # Author
 
